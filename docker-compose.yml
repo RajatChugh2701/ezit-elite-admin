@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:19-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ezit_elite
+      POSTGRES_USER: ezit
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ezit_local_dev_only}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ezit_postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ezit -d ezit_elite"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  ezit_postgres:
