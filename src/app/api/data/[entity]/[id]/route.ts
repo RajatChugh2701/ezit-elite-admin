@@ -54,7 +54,7 @@ export async function PUT(request: Request, context: Context) {
   params.push(id);
   let where = `id=$${params.length}`;
   if (user.role === "City Admin" && ["applications","members","requests","pes"].includes(entity)) {
-    params.push(user.city);
+    params.push(user.city ?? "");
     where += ` AND city=$${params.length}`;
   }
   const result = await pool.query(`UPDATE ${cfg.table} SET ${assignments.join(",")},updated_at=now() WHERE ${where} RETURNING id`, params);
